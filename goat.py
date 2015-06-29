@@ -29,25 +29,13 @@ def goatLoad():
     return obj
 
 def goatDraw(obj):
-	'''
-    if obj.t[0] < -MAX_TRANS_X:
-        obj.t = (-MAX_TRANS_X, obj.t[1], obj.t[2])
-        return False
-    if obj.t[0] > MAX_TRANS_X: 
-        obj.t = (MAX_TRANS_X, obj.t[1], obj.t[2])
-        return False
-    if obj.t[1] < -MAX_TRANS_Y:
-        obj.t = (obj.t[0], -MAX_TRANS_Y, obj.t[2])
-        return False
-    if obj.t[1] > MAX_TRANS_Y:
-        obj.t = (obj.t[0], MAX_TRANS_Y, obj.t[2])
-        return False
-    if obj.t[2] < -MAX_TRANS_Z:
-		obj.t = (obj.t[0], obj.t[1], -MAX_TRANS_Z)
-		return False
-    '''
+	if obj.t[1] < -MAX_TRANS_Y:
+		obj.t = (obj.t[0], -MAX_TRANS_Y, obj.t[2])
+		obj.velX = 0
+		obj.velY = 0
+		obj.velZ = 0
 	objDraw(obj)
-    #return True
+	#return True
 
 def objMove(obj):
 	##calculate velocity vector
