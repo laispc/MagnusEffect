@@ -3,39 +3,33 @@ from OpenGL.GLE.exceptional import _lengthOfArgname
 __author__ = 'rvferreira e laispc'
 
 import sys
-
+import pygame
+import OpenGL
+from OpenGL.GL import *
 from OpenGL.GLU import *
 from pygame.locals import *
-
-from space import setLights, meteorLoad, meteorDraw, meteorMove
-from goat import goatLoad, goatDraw
-from starfield import *
-from goat import goatLoad, goatDraw, objMoveX, objMoveY, objRotate, objMove 
+from space import setLights
+from goat import *
 from utils import Z_FAR, Z_NEAR, WINDOW_HEIGHT, WINDOW_WIDTH, load_sound
 
 DEATH_TIMER = 200
 
 def main():
 
-    #pygame.mixer.init()
-    #pygame.mixer.music.load('focus.mp3')
-    #pygame.mixer.music.play(-1)
-    #effect = load_sound('goat_yell.wav')
-    #effect.play()
 
     size = width, height = WINDOW_WIDTH, WINDOW_HEIGHT
 
     screen = pygame.display.set_mode(size, OPENGL|DOUBLEBUF)
-    pygame.display.set_caption("SpaceGoat")
+    #pygame.display.set_caption("SpaceGoat")
     setLights()
 
     pygame.init()
 
-    font = pygame.font.Font(None, 20)
-    textSurface = font.render("SpaceGoat", True, (255,255,255,255), (0,0,0,255))
-    textData = pygame.image.tostring(textSurface, "RGBA", True)
-    glRasterPos3d(0,0,5)
-    glDrawPixels(textSurface.get_width(), textSurface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, textData)
+    #font = pygame.font.Font(None, 20)
+    #textSurface = font.render("SpaceGoat", True, (255,255,255,255), (0,0,0,255))
+    #textData = pygame.image.tostring(textSurface, "RGBA", True)
+    #glRasterPos3d(0,0,5)
+    #glDrawPixels(textSurface.get_width(), textSurface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, textData)
 
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -63,26 +57,38 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
-                elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                    if event.key == pygame.K_LEFT: pass
-                    else: pass
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT: pass
+                elif event.key == pygame.K_SPACE:
+                	#Throw it again
+                    objRestart(goat)
+                elif event.key == pygame.K_d:
+                	#Back to default settings
+                    objLoadParams(goat)
+                elif event.key == pygame.K_m:
+                	#Increase mass
+                    increaseMass(goat)
+                elif event.key == pygame.K_v:
+                	#Increase velocity
+                    increaseVelocity(goat)
+                elif event.key == pygame.K_r:
+                	#Increase rotation
+                	increaseRotation(goat)
+                elif event.key == pygame.K_w:
+                	#Increase wind
+                    increaseWind(goat)
 
         if move:
             goatMove(goat, dir)
 
-        #objMoveX(goat)
-        #objMoveY(goat)
+    	pygame.display.set_caption("Velocity = "+ str(getVelocity(goat)) + "   Rotation = "+ str(getRotation(goat)) + "   Mass = "+ str(getMass(goat))+ "   Wind = "+ str(getWind(goat)) )
         objMove(goat)
         objRotate(goat)
-        #goat.t = (goat.t[0], goat.t[1], goat.t[2]-1) 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
    
         
-        keepDrawing = goatDraw(goat)
-        print " ", keepDrawing
+        goatDraw(goat)
         pygame.display.flip()
 
 if __name__ == '__main__': main()
